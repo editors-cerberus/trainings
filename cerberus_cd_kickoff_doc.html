@@ -1,0 +1,872 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .ck-root {
+    background: #0A0A0A;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  .ck-nav {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 200px;
+    min-width: 200px;
+    background: #0D0D0D;
+    border-right: 1px solid #1E1E1E;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0;
+    overflow-y: auto;
+  }
+
+  .ck-nav-logo {
+    padding: 0 1.25rem 1.5rem;
+    border-bottom: 1px solid #1E1E1E;
+    margin-bottom: 1rem;
+  }
+
+  .ck-nav-logo span {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #E8000D;
+  }
+
+  .ck-nav-logo small {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #555;
+    margin-top: 2px;
+  }
+
+  .ck-nav a {
+    display: block;
+    padding: 0.5rem 1.25rem;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+    border-left: 2px solid transparent;
+  }
+
+  .ck-nav a:hover, .ck-nav a.active {
+    color: #E8000D;
+    border-left-color: #E8000D;
+  }
+
+  .ck-nav-section {
+    padding: 1rem 1.25rem 0.25rem;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #333;
+  }
+
+  .ck-main { flex: 1; overflow-y: auto; min-width: 0; }
+
+  .ck-hero {
+    min-height: 380px;
+    background: #0A0A0A;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid #1A1A1A;
+  }
+
+  .ck-hero-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Anton', sans-serif;
+    font-size: 200px;
+    letter-spacing: 8px;
+    color: #E8000D;
+    opacity: 0.04;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .ck-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #E8000D;
+    margin-bottom: 1rem;
+  }
+
+  .ck-hero h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 64px;
+    line-height: 1;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .ck-hero h1 span { color: #E8000D; }
+
+  .ck-hero p {
+    font-size: 15px;
+    color: #888;
+    max-width: 540px;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  .ck-section {
+    padding: 3rem;
+    border-bottom: 1px solid #1A1A1A;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .ck-section.visible { opacity: 1; transform: translateY(0); }
+
+  .ck-section-num {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-family: 'Anton', sans-serif;
+    font-size: 140px;
+    color: #E8000D;
+    opacity: 0.04;
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+
+  .ck-section-title {
+    font-family: 'Anton', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin-bottom: 0.25rem;
+  }
+
+  .ck-section-sub {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #E8000D;
+    margin-bottom: 2rem;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .team-card {
+    background: #141414;
+    border: 1px solid #1E1E1E;
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: border-color 0.2s;
+  }
+
+  .team-card:hover { border-color: #E8000D; }
+
+  .team-card .role-badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #E8000D;
+    border: 1px solid #E8000D22;
+    background: #E8000D11;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+  }
+
+  .team-card .name {
+    font-family: 'Anton', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin-bottom: 0.5rem;
+  }
+
+  .team-card .desc { font-size: 13px; color: #888; line-height: 1.6; }
+
+  .team-card.star {
+    border-color: #E8000D44;
+    background: linear-gradient(135deg, #141414, #1A0A0A);
+  }
+
+  .buddy-banner {
+    background: #E8000D;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .buddy-banner .bi {
+    font-family: 'Anton', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    color: #FFFFFF;
+    opacity: 0.3;
+    flex-shrink: 0;
+  }
+
+  .buddy-banner p { font-size: 13px; color: #FFFFFF; line-height: 1.6; }
+
+  .buddy-banner strong {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    opacity: 0.85;
+  }
+
+  .client-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .client-card {
+    background: #141414;
+    border: 1px solid #1E1E1E;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .client-card:hover { border-color: #333; }
+  .client-card.inactive { opacity: 0.5; border-style: dashed; }
+
+  .client-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .client-name {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    line-height: 1;
+  }
+
+  .client-status {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .client-status.active { color: #4CAF50; background: #4CAF5011; border: 1px solid #4CAF5033; }
+  .client-status.upcoming { color: #888; background: #88888811; border: 1px solid #33333355; }
+
+  .client-desc { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 1.25rem; }
+
+  .client-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #555;
+    background: #1A1A1A;
+    border: 1px solid #222;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin: 2px;
+  }
+
+  .client-links { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+
+  .client-links a {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #E8000D;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-bottom: 1px solid #E8000D44;
+    padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+
+  .client-links a:hover { border-color: #E8000D; }
+
+  .client-x3 {
+    font-size: 11px;
+    color: #E8000D;
+    letter-spacing: 1px;
+    background: #E8000D11;
+    border: 1px solid #E8000D22;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
+
+  .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+  .tool-card { background: #141414; border: 1px solid #1E1E1E; border-radius: 8px; padding: 1.25rem; }
+  .tool-icon { font-size: 24px; margin-bottom: 0.75rem; color: #E8000D; }
+  .tool-name { font-size: 13px; font-weight: 600; color: #FFFFFF; margin-bottom: 0.5rem; }
+  .tool-desc { font-size: 12px; color: #666; line-height: 1.6; }
+  .tool-link { display: inline-block; margin-top: 0.75rem; font-size: 11px; color: #E8000D; text-decoration: none; }
+
+  .playbook-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .playbook-item {
+    background: #141414;
+    border: 1px solid #1E1E1E;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .playbook-item:hover { border-color: #E8000D44; background: #1A0A0A; }
+  .playbook-icon { font-size: 20px; color: #E8000D; flex-shrink: 0; width: 24px; text-align: center; }
+  .playbook-content { flex: 1; }
+  .playbook-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #E8000D; margin-bottom: 0.2rem; }
+  .playbook-title { font-size: 14px; color: #FFFFFF; font-weight: 500; }
+  .playbook-type { font-size: 10px; color: #555; margin-top: 0.2rem; letter-spacing: 1px; text-transform: uppercase; }
+  .playbook-arrow { font-size: 16px; color: #333; }
+
+  .workflow-steps { display: flex; flex-direction: column; gap: 0; }
+
+  .wf-step { display: flex; gap: 1.5rem; position: relative; }
+
+  .wf-step:not(:last-child) .wf-line {
+    position: absolute;
+    left: 16px;
+    top: 36px;
+    bottom: 0;
+    width: 1px;
+    background: #1E1E1E;
+  }
+
+  .wf-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #E8000D44;
+    background: #0A0A0A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #E8000D;
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wf-content { padding-bottom: 2rem; flex: 1; }
+  .wf-title { font-size: 14px; font-weight: 600; color: #FFFFFF; margin-bottom: 0.4rem; }
+  .wf-desc { font-size: 13px; color: #666; line-height: 1.6; }
+
+  .info-bar {
+    background: #141414;
+    border: 1px solid #1E1E1E;
+    border-left: 3px solid #E8000D;
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .info-bar strong { color: #FFFFFF; font-weight: 600; }
+
+  .ck-footer { padding: 2rem 3rem; text-align: center; }
+  .ck-footer p { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #333; }
+  .ck-footer span { color: #E8000D; }
+
+  @media (max-width: 640px) {
+    .ck-nav { display: none; }
+    .ck-hero h1 { font-size: 40px; }
+    .ck-section { padding: 2rem 1.25rem; }
+    .ck-hero { padding: 2rem 1.25rem 2rem; }
+  }
+</style>
+
+<div class="ck-root">
+  <nav class="ck-nav" aria-label="Navegación del documento">
+    <div class="ck-nav-logo">
+      <span>CERBERUS</span>
+      <small>creative company</small>
+    </div>
+    <span class="ck-nav-section">Intro</span>
+    <a href="#welcome">Bienvenida</a>
+    <span class="ck-nav-section">El equipo</span>
+    <a href="#team">Directorio</a>
+    <span class="ck-nav-section">Clientes</span>
+    <a href="#clients">Mis clientes</a>
+    <span class="ck-nav-section">Workflow</span>
+    <a href="#tools">Stack de herramientas</a>
+    <a href="#briefs">Briefs</a>
+    <a href="#delivery">Entregas</a>
+    <span class="ck-nav-section">Recursos</span>
+    <a href="#playbooks">Playbooks</a>
+  </nav>
+
+  <main class="ck-main">
+
+    <section class="ck-hero" id="welcome">
+      <div class="ck-hero-bg" aria-hidden="true">CERBERUS</div>
+      <div class="ck-eyebrow">Cerberus Creative Company — CD Onboarding</div>
+      <h1>Welcome to<br>the <span>pack.</span></h1>
+      <p>Este documento es tu punto de entrada al universo Cerberus. Acá vas a encontrar todo lo que necesitás saber sobre el equipo, los clientes y cómo trabajamos. Preparado por Sol, tu training buddy.</p>
+    </section>
+
+    <section class="ck-section" id="team">
+      <div class="ck-section-num" aria-hidden="true">01</div>
+      <div class="ck-section-sub">Sección 01</div>
+      <h2 class="ck-section-title">El directorio</h2>
+
+      <div class="team-grid">
+
+        <div class="team-card star">
+          <div class="role-badge">⭐ Founder & CEO</div>
+          <div class="name">Martín</div>
+          <div class="desc">El creador de toda la empresa. En su momento fue cada uno de los roles — por eso entiende mejor que nadie cómo funciona Cerberus por dentro. Cualquier cosa que puedas aprender de su lado es oro.</div>
+        </div>
+
+        <div class="team-card">
+          <div class="role-badge">Head of Talent</div>
+          <div class="name">Parra</div>
+          <div class="desc">Ya lo conocés. Es tu referente para todo lo corporativo y administrativo. Además de reclutar, está para acompañarte y asegurarse de que estés cómodo. ¿Dudas de empresa? Parra y/o Tom.</div>
+        </div>
+
+        <div class="team-card">
+          <div class="role-badge">Head of Operations</div>
+          <div class="name">Tom</div>
+          <div class="desc">Todo lo operativo pasa por Tom: cómo comunicar, cómo se entregan las cosas, accesos a las plataformas. También es tu contacto para el onboarding de herramientas y el mail <strong style="color:#FFFFFF">editors@cerberus.inc</strong>.</div>
+        </div>
+
+        <div class="team-card">
+          <div class="role-badge">Creative Director · AI</div>
+          <div class="name">Goldin</div>
+          <div class="desc">Está desarrollando y liderando el área de inteligencia artificial dentro de la agencia. El futuro del workflow creativo en Cerberus.</div>
+        </div>
+
+        <div class="team-card">
+          <div class="role-badge">Creative Director · 3D</div>
+          <div class="name">Pit</div>
+          <div class="desc">CD con fuertes conocimientos en 3D. Entró hace poco pero se puso a tono rapidísimo — perfil muy sólido.</div>
+        </div>
+
+      </div>
+
+      <div class="buddy-banner">
+        <div class="bi" aria-hidden="true">SOL</div>
+        <div>
+          <p><strong>Tu training buddy</strong>Voy a estar acompañándote en todo tu entrenamiento. Podés preguntarme cualquier cosa — clientes, workflows, herramientas, lo que sea. No existe la pregunta tonta.</p>
+        </div>
+      </div>
+
+      <p style="font-size:12px;color:#444;margin-top:1.5rem;line-height:1.6;">El resto del equipo lo vas conociendo de a poco a medida que trabajemos juntos. Son todos unos tipazos y muy talentosos — no te quiero abrumar ahora con todos los roles.</p>
+    </section>
+
+    <section class="ck-section" id="clients">
+      <div class="ck-section-num" aria-hidden="true">02</div>
+      <div class="ck-section-sub">Sección 02</div>
+      <h2 class="ck-section-title">Mis clientes</h2>
+
+      <div class="client-grid">
+
+        <div class="client-card">
+          <div class="client-header">
+            <div class="client-name">Neuroscale</div>
+            <span class="client-status active">Activo · x3</span>
+          </div>
+          <div class="client-desc">Plataforma de neurociencia aplicada. Es el cliente más importante del portfolio. Tenemos capacidad de trabajar 3 cosas en paralelo (retainer x3) — en general producimos 3 cinematics por mes más static images.</div>
+          <div>
+            <span class="client-tag">Cinematics</span>
+            <span class="client-tag">Static images</span>
+            <span class="client-tag">x3 retainer</span>
+          </div>
+          <div class="client-x3">★ Cliente principal</div>
+          <div class="client-links">
+            <a href="https://neuroscale.ai" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> Web</a>
+            <a href="https://f.io/GGxlU8NH" target="_blank"><i class="ti ti-folder" aria-hidden="true"></i> Frame</a>
+          </div>
+        </div>
+
+        <div class="client-card">
+          <div class="client-header">
+            <div class="client-name">Troll Co</div>
+            <span class="client-status active">Activo</span>
+          </div>
+          <div class="client-desc">Ropa para trabajadores manuales blue collar: soldadores, mecánicos, gente que labura con las manos. El estilo de producción es premium video muy dinámico — alta energía, muy visual.</div>
+          <div>
+            <span class="client-tag">Premium video</span>
+            <span class="client-tag">Dinámico</span>
+            <span class="client-tag">Blue collar</span>
+          </div>
+          <div class="client-links">
+            <a href="https://trollcoclothing.com" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> Web</a>
+            <a href="https://f.io/RQirblJB" target="_blank"><i class="ti ti-folder" aria-hidden="true"></i> Frame</a>
+          </div>
+        </div>
+
+        <div class="client-card">
+          <div class="client-header">
+            <div class="client-name">Shift</div>
+            <span class="client-status active">Activo</span>
+          </div>
+          <div class="client-desc">Plataforma anti-doomscrolling: se activa desde la PC y bloquea apps distractivas del celular durante una sesión — no se puede desactivar hasta que termina el tiempo. Arrancó como one-off pero se queda. Cinematic a punto de entregarse, static images y premium videos en producción.</div>
+          <div>
+            <span class="client-tag">Cinematic</span>
+            <span class="client-tag">Static images</span>
+            <span class="client-tag">Premium video</span>
+          </div>
+          <div class="client-links">
+            <a href="https://shiftyourphone.com" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> Web</a>
+            <a href="https://f.io/l7y1V2Bg" target="_blank"><i class="ti ti-folder" aria-hidden="true"></i> Frame</a>
+          </div>
+        </div>
+
+        <div class="client-card">
+          <div class="client-header">
+            <div class="client-name">Wesley</div>
+            <span class="client-status active">Activo · 2 marcas</span>
+          </div>
+          <div class="client-desc">Dos marcas bajo un mismo paraguas. <strong style="color:#FFFFFF">Wesley Financial Group</strong> ayuda a personas a salir de contratos de timeshare. <strong style="color:#FFFFFF">Medical House Calls (MHC)</strong> es un servicio de medicina a domicilio. Para Wesley hacemos videos estilo papercut. MHC está en etapa de definición de branding — el estilo definitivo está en construcción.</div>
+          <div>
+            <span class="client-tag">Papercut (Wesley)</span>
+            <span class="client-tag">Branding (MHC)</span>
+            <span class="client-tag">Dos marcas</span>
+          </div>
+          <div class="client-links">
+            <a href="https://wesleyfinancialgroup.com" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> Wesley</a>
+            <a href="https://medicalhousecalls.com" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> MHC</a>
+            <a href="https://f.io/AfFwRAAu" target="_blank"><i class="ti ti-folder" aria-hidden="true"></i> Frame</a>
+          </div>
+        </div>
+
+        <div class="client-card inactive">
+          <div class="client-header">
+            <div class="client-name">Little Trouble</div>
+            <span class="client-status upcoming">Próximamente</span>
+          </div>
+          <div class="client-desc">Marca de ropa para niños inspirada en la cultura del motocross. El concepto apunta a la estética X Games de los 90s: que los chicos lo quieran y los padres se identifiquen tanto que compren. Todavía no arrancamos.</div>
+          <div>
+            <span class="client-tag">Motocross</span>
+            <span class="client-tag">90s X-Games</span>
+            <span class="client-tag">Ropa infantil</span>
+          </div>
+          <div class="client-links">
+            <a href="https://littletrouble.com" target="_blank"><i class="ti ti-external-link" aria-hidden="true"></i> Web</a>
+          </div>
+        </div>
+
+        <div class="client-card inactive" style="border-color:#333;">
+          <div class="client-header">
+            <div class="client-name">Gridbank</div>
+            <span class="client-status upcoming">Ver Frame</span>
+          </div>
+          <div class="client-desc">Cliente con trabajo previo documentado en Frame. Referencia para ver estilo y calidad de entrega.</div>
+          <div class="client-links">
+            <a href="https://f.io/rHWnVoZX" target="_blank"><i class="ti ti-folder" aria-hidden="true"></i> Frame</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="ck-section" id="tools">
+      <div class="ck-section-num" aria-hidden="true">03</div>
+      <div class="ck-section-sub">Sección 03</div>
+      <h2 class="ck-section-title">Stack de herramientas</h2>
+
+      <div class="info-bar">
+        <strong>Acceso:</strong> Entrás a todo con el mail <strong>editors@cerberus.inc</strong>. Si aún no tenés acceso, hablá con Tom.
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-card">
+          <div class="tool-icon"><i class="ti ti-brand-frame" aria-hidden="true"></i></div>
+          <div class="tool-name">Frame.io</div>
+          <div class="tool-desc">La plataforma central de entregas y revisiones. Acá viven todos los clientes y sus piezas. Mantener la organización de carpetas es fundamental.</div>
+          <a href="https://next.frame.io" class="tool-link" target="_blank">next.frame.io →</a>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-icon"><i class="ti ti-layout-board" aria-hidden="true"></i></div>
+          <div class="tool-name">Foreplay</div>
+          <div class="tool-desc">Para briefs de entrega a cliente. Es el formato más prolijo y profesional cuando necesitamos presentarle algo formal al cliente.</div>
+          <a href="https://foreplay.co" class="tool-link" target="_blank">foreplay.co →</a>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-icon"><i class="ti ti-pin" aria-hidden="true"></i></div>
+          <div class="tool-name">Milanote</div>
+          <div class="tool-desc">El favorito de Sol para briefs con mucha referencia visual. Si sos visual, te va a encantar. Te recomendamos explorarlo al principio.</div>
+          <a href="https://milanote.com" class="tool-link" target="_blank">milanote.com →</a>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+          <div class="tool-name">Google Docs</div>
+          <div class="tool-desc">Alternativa válida para briefs y documentación. Varios del equipo lo usan para los playbooks y documentos internos.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ck-section" id="briefs">
+      <div class="ck-section-num" aria-hidden="true">04</div>
+      <div class="ck-section-sub">Sección 04</div>
+      <h2 class="ck-section-title">Cómo hacemos los briefs</h2>
+
+      <div class="info-bar">
+        Los briefs son flexibles — usá la herramienta con la que te sientas más cómodo. Lo que importa es la claridad del brief, no la plataforma.
+      </div>
+
+      <div class="workflow-steps">
+        <div class="wf-step">
+          <div class="wf-dot">1</div>
+          <div class="wf-line"></div>
+          <div class="wf-content">
+            <div class="wf-title">Entrega a cliente → Foreplay</div>
+            <div class="wf-desc">Cuando el brief va a ser presentado al cliente, usamos Foreplay. Es la opción más prolija y profesional. <a href="https://app.foreplay.co/share/briefs/IKTuBsbIPdBRZK6jY72S" style="color:#E8000D;font-size:12px;" target="_blank">Ver ejemplo →</a></div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-dot">2</div>
+          <div class="wf-line"></div>
+          <div class="wf-content">
+            <div class="wf-title">Briefs visuales → Milanote</div>
+            <div class="wf-desc">Para cuando el brief necesita mucha referencia visual e inspiración. El tablero de Sol funciona como referencia. <a href="https://app.milanote.com/1Wxl5P1E3IVqdG?p=zkX1XBCoX7N" style="color:#E8000D;font-size:12px;" target="_blank">Ver ejemplo →</a></div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-dot">3</div>
+          <div class="wf-line"></div>
+          <div class="wf-content">
+            <div class="wf-title">Briefs en docs → Google Docs</div>
+            <div class="wf-desc">Para briefs más estructurados o documentación interna. <a href="https://docs.google.com/document/d/1QX-LkEHF175euUwJbMXzqki9z__kS__hAzdKOmvxyoE/edit?usp=sharing" style="color:#E8000D;font-size:12px;" target="_blank">Ver ejemplo →</a></div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-dot">★</div>
+          <div class="wf-content">
+            <div class="wf-title">¿Usás otra herramienta?</div>
+            <div class="wf-desc">Bienvenido sea. Lo que importa es que el brief sea claro. Explorá y encontrá tu flujo.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ck-section" id="delivery">
+      <div class="ck-section-num" aria-hidden="true">05</div>
+      <div class="ck-section-sub">Sección 05</div>
+      <h2 class="ck-section-title">Entregas y revisiones</h2>
+
+      <div class="info-bar">
+        <strong>El estándar es alto.</strong> Siempre apuntamos a calidad de portfolio, no al estándar del cliente que suele ser más bajo. Somos un poco quemagorra con esto — y está bien.
+      </div>
+
+      <div class="workflow-steps">
+        <div class="wf-step">
+          <div class="wf-dot">1</div>
+          <div class="wf-line"></div>
+          <div class="wf-content">
+            <div class="wf-title">Todo vive en Frame.io</div>
+            <div class="wf-desc">Las entregas y revisiones se hacen siempre por Frame. La organización de carpetas por cliente es sagrada — no la rompas.</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-dot">2</div>
+          <div class="wf-line"></div>
+          <div class="wf-content">
+            <div class="wf-title">Cinematics → mínimo 8 rondas de feedback</div>
+            <div class="wf-desc">Para llegar a calidad 10/10 en un cinematic, el proceso real implica al menos 8 rondas con el editor. No es una exageración — es el proceso.</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-dot">3</div>
+          <div class="wf-line"></div>
+          <div class="wf-content">
+            <div class="wf-title">Portfolio como referencia de calidad</div>
+            <div class="wf-desc">Antes de dar algo por bueno, medilo contra el portfolio. <a href="https://f.io/TvIM39JA" style="color:#E8000D;font-size:12px;" target="_blank">Ver portfolio de cinematics →</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ck-section" id="playbooks">
+      <div class="ck-section-num" aria-hidden="true">06</div>
+      <div class="ck-section-sub">Sección 06</div>
+      <h2 class="ck-section-title">Playbooks — la biblia</h2>
+
+      <p style="font-size:13px;color:#666;line-height:1.7;margin-bottom:1.5rem;">Estos son los documentos y videos que definen cómo pensamos y trabajamos en Cerberus. Léelos, míralos, volvé a ellos. Son la base de todo.</p>
+
+      <div class="playbook-list">
+
+        <a class="playbook-item" href="https://docs.google.com/document/d/1aH595ucF--l0_waHxRXtcqyQYZEaoP6ltPTGtQ503-M/edit?usp=sharing" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Operating guide</div>
+            <div class="playbook-title">Creative Direction — Operating Playbook</div>
+            <div class="playbook-type">Google Doc</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://www.loom.com/share/0c3bc847c86342edbccfcd7a9a75bbfb" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Video · Playbook</div>
+            <div class="playbook-title">Creative Direction Playbook</div>
+            <div class="playbook-type">Loom</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://docs.google.com/document/d/10C43ghLVDghgyGRSd-athRFcwOjNnbomLpPgIAsd5Fk/edit?tab=t.0" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Doc · Playbook</div>
+            <div class="playbook-title">Creative Direction Playbook Doc</div>
+            <div class="playbook-type">Google Doc</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://www.loom.com/share/91f1688f0c654a988c56aa1afc794457" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Video · Masterclass</div>
+            <div class="playbook-title">Copy Masterclass</div>
+            <div class="playbook-type">Loom</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://docs.google.com/document/d/1QJCOx8OcJKo8fmydJ5X-nJWjwxnSL_aIR6StUFHdhmk/edit?pli=1&tab=t.0" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Doc · Masterclass</div>
+            <div class="playbook-title">Copy Masterclass Doc</div>
+            <div class="playbook-type">Google Doc</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://fathom.video/share/4PexWyyijfdy39LEXkz3aeHKYwgauGjh" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Video · Training especial</div>
+            <div class="playbook-title">Training de Sol con Martín — cuando empezó desde cero</div>
+            <div class="playbook-type">Fathom · El más honesto</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://docs.google.com/document/d/1-kjs4_W05gg98UsDiQ96uy0QtMGBw60KktoDTiRPz5c/edit?usp=sharing" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Doc · Training</div>
+            <div class="playbook-title">Doc del training de Sol con Martín</div>
+            <div class="playbook-type">Google Doc</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://www.loom.com/share/90729d3ea223440db5785e859153b65f" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Video · Estándar de calidad</div>
+            <div class="playbook-title">Cinematics 10/10 — el estándar</div>
+            <div class="playbook-type">Loom</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a class="playbook-item" href="https://docs.google.com/document/d/1VfrTeeq49G_OrmmkSW0dc_wI_56LNLleG1Y4x7nqhAI/edit?tab=t.0" target="_blank">
+          <div class="playbook-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+          <div class="playbook-content">
+            <div class="playbook-label">Doc · Cinematics</div>
+            <div class="playbook-title">Cinematics 10/10 — Playbook Doc</div>
+            <div class="playbook-type">Google Doc</div>
+          </div>
+          <div class="playbook-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+      </div>
+    </section>
+
+    <footer class="ck-footer">
+      <p>Cerberus <span>Creative Company</span> · Preparado por Sol · 2026</p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.ck-section');
+  const navLinks = document.querySelectorAll('.ck-nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  document.querySelectorAll('.ck-nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
