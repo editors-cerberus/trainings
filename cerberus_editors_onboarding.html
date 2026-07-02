@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cerberus — Editor Onboarding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; }
+    .ck-root { display: flex; min-height: 100vh; }
+
+    /* NAV */
+    .ck-nav { position: sticky; top: 0; height: 100vh; width: 200px; min-width: 200px; background: #0D0D0D; border-right: 1px solid #1E1E1E; display: flex; flex-direction: column; padding: 1.5rem 0; overflow-y: auto; }
+    .ck-nav-logo { padding: 0 1.25rem 1.5rem; border-bottom: 1px solid #1E1E1E; margin-bottom: 1rem; }
+    .ck-nav-logo span { font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 2px; color: #E8000D; }
+    .ck-nav-logo small { display: block; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #555; margin-top: 2px; }
+    .ck-nav a { display: block; padding: 0.4rem 1.25rem; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #666; text-decoration: none; transition: color 0.2s; border-left: 2px solid transparent; }
+    .ck-nav a:hover, .ck-nav a.active { color: #E8000D; border-left-color: #E8000D; }
+    .ck-nav-section { padding: 0.75rem 1.25rem 0.2rem; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #333; }
+
+    /* MAIN */
+    .ck-main { flex: 1; min-width: 0; }
+
+    /* HERO */
+    .ck-hero { min-height: 320px; background: #0A0A0A; display: flex; flex-direction: column; justify-content: flex-end; padding: 3rem; position: relative; overflow: hidden; border-bottom: 1px solid #1A1A1A; }
+    .ck-hero-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Anton', sans-serif; font-size: 200px; letter-spacing: 8px; color: #E8000D; opacity: 0.04; white-space: nowrap; pointer-events: none; }
+    .ck-eyebrow { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #E8000D; margin-bottom: 1rem; }
+    .ck-hero h1 { font-family: 'Anton', sans-serif; font-size: 64px; line-height: 1; letter-spacing: 2px; color: #FFF; text-transform: uppercase; margin-bottom: 1rem; position: relative; }
+    .ck-hero h1 span { color: #E8000D; }
+    .ck-hero p { font-size: 15px; color: #888; max-width: 540px; line-height: 1.7; position: relative; }
+
+    /* SECTIONS */
+    .ck-section { padding: 3rem; border-bottom: 1px solid #1A1A1A; position: relative; overflow: hidden; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .ck-section.visible { opacity: 1; transform: translateY(0); }
+    .ck-section-num { position: absolute; top: -20px; right: -10px; font-family: 'Anton', sans-serif; font-size: 140px; color: #E8000D; opacity: 0.04; pointer-events: none; line-height: 1; }
+    .ck-section-title { font-family: 'Anton', sans-serif; font-size: 32px; letter-spacing: 1px; text-transform: uppercase; color: #FFF; margin-bottom: 0.25rem; }
+    .ck-section-sub { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #E8000D; margin-bottom: 2rem; }
+
+    /* VIDEO */
+    .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; border-radius: 8px; overflow: hidden; border: 1px solid #1E1E1E; background: #141414; }
+    .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+    /* INFO BAR */
+    .info-bar { background: #141414; border: 1px solid #1E1E1E; border-left: 3px solid #E8000D; border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 1.5rem; }
+    .info-bar strong { color: #FFF; font-weight: 600; }
+
+    /* CARDS */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .card { background: #141414; border: 1px solid #1E1E1E; border-radius: 8px; padding: 1.25rem; }
+    .card-icon { font-size: 22px; color: #E8000D; margin-bottom: 0.75rem; }
+    .card-title { font-size: 14px; font-weight: 600; color: #FFF; margin-bottom: 0.4rem; }
+    .card-desc { font-size: 12px; color: #666; line-height: 1.6; }
+    .card-link { display: inline-block; margin-top: 0.75rem; font-size: 11px; color: #E8000D; text-decoration: none; }
+
+    /* STEPS */
+    .steps { display: flex; flex-direction: column; }
+    .step { display: flex; gap: 1.5rem; position: relative; }
+    .step:not(:last-child) .step-line { position: absolute; left: 16px; top: 36px; bottom: 0; width: 1px; background: #1E1E1E; }
+    .step-dot { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #E8000D44; background: #0A0A0A; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; font-weight: 600; color: #E8000D; margin-top: 2px; position: relative; z-index: 1; }
+    .step-content { padding-bottom: 2rem; flex: 1; }
+    .step-title { font-size: 14px; font-weight: 600; color: #FFF; margin-bottom: 0.4rem; }
+    .step-desc { font-size: 13px; color: #666; line-height: 1.6; }
+
+    /* HIGHLIGHT CARD */
+    .highlight { background: linear-gradient(135deg, #141414, #1A0A0A); border: 1px solid #E8000D33; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; }
+    .highlight p { font-size: 13px; color: #CCC; line-height: 1.8; }
+    .highlight strong { color: #E8000D; }
+
+    /* RULE ROWS */
+    .rule-row { display: flex; align-items: flex-start; gap: 1rem; background: #141414; border: 1px solid #1E1E1E; border-radius: 6px; padding: 1rem 1.1rem; margin-bottom: 0.5rem; }
+    .rule-num { font-family: 'Anton', sans-serif; font-size: 20px; color: #E8000D; opacity: 0.4; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+    .rule-text { font-size: 13px; color: #CCC; line-height: 1.6; }
+    .rule-text strong { color: #FFF; }
+
+    /* FOOTER */
+    .ck-footer { padding: 3rem; border-top: 1px solid #1A1A1A; }
+    .ck-footer-msg { background: linear-gradient(135deg, #141414, #1A0A0A); border: 1px solid #E8000D22; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; }
+    .ck-footer-msg p { font-size: 15px; color: #CCC; line-height: 1.8; }
+    .ck-footer-sig { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #333; text-align: center; }
+    .ck-footer-sig span { color: #E8000D; }
+
+    @media (max-width: 640px) { .ck-nav { display: none; } .ck-hero h1 { font-size: 40px; } .ck-section, .ck-hero, .ck-footer { padding: 2rem 1.25rem; } }
+  </style>
+</head>
+<body>
+<div class="ck-root">
+
+  <nav class="ck-nav">
+    <div class="ck-nav-logo"><span>CERBERUS</span><small>creative company</small></div>
+    <span class="ck-nav-section">Intro</span>
+    <a href="#welcome">Bienvenida</a>
+    <a href="#video">Video intro</a>
+    <span class="ck-nav-section">La empresa</span>
+    <a href="#cerberus">Qué es Cerberus</a>
+    <a href="#equipo">El equipo</a>
+    <span class="ck-nav-section">La empresa</span>
+    <a href="#equipo">El equipo</a>
+    <span class="ck-nav-section">Cómo trabajamos</span>
+    <a href="#herramientas">Herramientas</a>
+    <a href="#pulso">El pulso</a>
+    <a href="#expectativas">Qué esperamos</a>
+    <a href="#asincrono">Trabajo asíncrono</a>
+    <span class="ck-nav-section">Recursos</span>
+    <a href="#eta">ETA table</a>
+    <a href="#inspo">Fuentes de inspo</a>
+    <a href="#playbooks">Playbooks</a>
+  </nav>
+
+  <main class="ck-main">
+
+    <!-- HERO -->
+    <section class="ck-hero" id="welcome">
+      <div class="ck-hero-bg">CERBERUS</div>
+      <div class="ck-eyebrow">Cerberus Creative Company — Editor Onboarding</div>
+      <h1>Welcome to<br><span>Cerberus.</span></h1>
+      <p>Si estás leyendo esto es porque sos parte del equipo. Acá encontrás todo lo que necesitás saber para arrancar — cómo trabajamos, qué esperamos de vos y qué podés esperar de nosotros.</p>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="ck-section" id="video">
+      <div class="ck-section-num">01</div>
+      <div class="ck-section-sub">Sección 01</div>
+      <h2 class="ck-section-title">Empezá por acá</h2>
+      <p style="font-size:13px;color:#888;line-height:1.7;margin-bottom:1.5rem;">Antes de seguir leyendo, mirá este video. Es una intro de ~10 minutos que te va a dar el contexto general de todo lo que viene después. Podés volver a verlo las veces que haga falta.</p>
+      <a href="https://www.loom.com/share/e3b749b6920746e99e1e53995f4ecfcb" target="_blank" style="display:block;text-decoration:none;">
+        <div style="background:#141414;border:1px solid #E8000D33;border-radius:8px;padding:2.5rem 2rem;display:flex;align-items:center;gap:2rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#E8000D'" onmouseout="this.style.borderColor='#E8000D33'">
+          <div style="width:64px;height:64px;border-radius:50%;background:#E8000D;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="ti ti-player-play" style="font-size:28px;color:#FFF;margin-left:4px;"></i>
+          </div>
+          <div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;margin-bottom:0.4rem;">Loom · 7 min</div>
+            <div style="font-family:'Anton',sans-serif;font-size:22px;letter-spacing:1px;text-transform:uppercase;color:#FFFFFF;margin-bottom:0.4rem;">Video intro — Welcome to Cerberus</div>
+            <div style="font-size:13px;color:#666;">Empezá por acá. Este video te da el contexto de todo lo que viene después.</div>
+          </div>
+          <div style="font-size:28px;color:#E8000D;opacity:0.4;margin-left:auto;flex-shrink:0;">→</div>
+        </div>
+      </a>
+    </section>
+
+    <!-- QUÉ ES CERBERUS -->
+    <section class="ck-section" id="cerberus">
+      <div class="ck-section-num">02</div>
+      <div class="ck-section-sub">Sección 02</div>
+      <h2 class="ck-section-title">Qué es Cerberus</h2>
+      <div class="info-bar">Producimos contenido audiovisual top tier que va directo a pauta — Meta, YouTube, TikTok. <strong>El estándar de calidad es el portfolio de Cerberus, no el estándar del cliente.</strong></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.75rem;margin-top:1rem;">
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:20px;color:#E8000D;margin-bottom:0.4rem;"><i class="ti ti-movie"></i></div><div style="font-size:12px;font-weight:600;color:#FFF;">Cinematics</div></div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:20px;color:#E8000D;margin-bottom:0.4rem;"><i class="ti ti-crown"></i></div><div style="font-size:12px;font-weight:600;color:#FFF;">Premium ads</div></div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:20px;color:#E8000D;margin-bottom:0.4rem;"><i class="ti ti-palette"></i></div><div style="font-size:12px;font-weight:600;color:#FFF;">2D animation</div></div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:20px;color:#E8000D;margin-bottom:0.4rem;"><i class="ti ti-box"></i></div><div style="font-size:12px;font-weight:600;color:#FFF;">3D modeling</div></div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:20px;color:#E8000D;margin-bottom:0.4rem;"><i class="ti ti-sparkles"></i></div><div style="font-size:12px;font-weight:600;color:#FFF;">AI support</div></div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:20px;color:#E8000D;margin-bottom:0.4rem;"><i class="ti ti-photo"></i></div><div style="font-size:12px;font-weight:600;color:#FFF;">Graphic design</div></div>
+      </div>
+    </section>
+
+    <!-- EL EQUIPO -->
+    <section class="ck-section" id="equipo">
+      <div class="ck-section-num">03</div>
+      <div class="ck-section-sub">Sección 03</div>
+      <h2 class="ck-section-title">El equipo</h2>
+      <p style="font-size:13px;color:#888;line-height:1.8;margin-bottom:1.5rem;">Estas son las personas con las que vas a interactuar. Conocerlas te ayuda a saber a quién acudir según lo que necesites.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;">
+        <div style="background:linear-gradient(135deg,#141414,#1A0A0A);border:1px solid #E8000D44;border-radius:8px;padding:1.25rem;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">⭐ Founder & CEO</div>
+          <div style="font-family:'Anton',sans-serif;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:#FFF;margin-bottom:0.5rem;">Martín</div>
+          <div style="font-size:13px;color:#888;line-height:1.6;">El creador de toda la empresa. En su momento fue cada uno de los roles — por eso entiende mejor que nadie cómo funciona Cerberus por dentro.</div>
+        </div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.25rem;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">Head of Operations</div>
+          <div style="font-family:'Anton',sans-serif;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:#FFF;margin-bottom:0.5rem;">Tom</div>
+          <div style="font-size:13px;color:#888;line-height:1.6;">Todo lo operativo pasa por Tom: asignaciones, deadlines, acceso a plataformas. Es el nexo entre vos y el equipo de dirección.</div>
+        </div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.25rem;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">Head of Talent</div>
+          <div style="font-family:'Anton',sans-serif;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:#FFF;margin-bottom:0.5rem;">Parra</div>
+          <div style="font-size:13px;color:#888;line-height:1.6;">Tu referente para todo lo corporativo y administrativo. Dudas sobre tu rol, condiciones o cualquier tema de empresa — Parra.</div>
+        </div>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.5rem;grid-column:1/-1;">
+          <div style="font-family:'Anton',sans-serif;font-size:26px;letter-spacing:1px;text-transform:uppercase;color:#FFF;margin-bottom:0.75rem;">Creative <span style="color:#E8000D;">Directors</span></div>
+          <div style="font-size:13px;color:#888;line-height:1.6;">Tu contacto directo en el día a día. Ante cualquier duda sobre un proyecto, un brief o una entrega, ellos son tu primer punto de consulta.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERRAMIENTAS -->
+    <section class="ck-section" id="herramientas">
+      <div class="ck-section-num">04</div>
+      <div class="ck-section-sub">Sección 04</div>
+      <h2 class="ck-section-title">Las herramientas</h2>
+      <p style="font-size:13px;color:#888;line-height:1.7;margin-bottom:1.5rem;">Usamos un stack concreto. Conocerlo bien es parte del trabajo.</p>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon"><i class="ti ti-brand-slack"></i></div>
+          <div class="card-title">Slack</div>
+          <div class="card-desc">Donde vivimos. Todo lo que no es un archivo pasa por acá — preguntas, avances, feedback rápido, confirmaciones. Si tenés una duda, la mandás por Slack.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="ti ti-brand-google-drive"></i></div>
+          <div class="card-title">Google Drive</div>
+          <div class="card-desc">Donde están los archivos del proyecto: assets, project files, versiones. Siempre organizado por carpeta de cliente.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="ti ti-brand-frame"></i></div>
+          <div class="card-title">Frame.io</div>
+          <div class="card-desc">Donde subís tus entregas para revisión. El CD deja comentarios con marca de tiempo directo sobre el video. Los procesamos antes de pasártelos a vos.</div>
+          <a href="https://next.frame.io" class="card-link" target="_blank">next.frame.io →</a>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="ti ti-video"></i></div>
+          <div class="card-title">Loom</div>
+          <div class="card-desc">Prácticamente todo brief viene acompañado de un Loom. Ahí te explicamos el proyecto con el detalle suficiente para que no quede ninguna duda. Si algo no quedó claro, preguntá — acá no hay preguntas tontas.</div>
+          <a href="https://loom.com" class="card-link" target="_blank">loom.com →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EL PULSO -->
+    <section class="ck-section" id="pulso">
+      <div class="ck-section-num">05</div>
+      <div class="ck-section-sub">Sección 05</div>
+      <h2 class="ck-section-title">El pulso</h2>
+      <div class="info-bar">Feedback de alta frecuencia desde el primer día. El objetivo no es que la primera entrega sea perfecta — es encontrar la dirección correcta lo antes posible.</div>
+      <div class="rule-row" style="margin-bottom:0.5rem;">
+        <div class="rule-num">→</div>
+        <div class="rule-text"><strong>Avances desde el día uno.</strong> Ya el mismo día esperamos un primer corte, aunque sea el esqueleto. Mejor corregir temprano que rehacer un día entero de trabajo.</div>
+      </div>
+      <div class="rule-row" style="margin-bottom:0.5rem;">
+        <div class="rule-num">→</div>
+        <div class="rule-text"><strong>Múltiples versiones en un día es normal.</strong> Es la señal de que el proceso está funcionando — no de que algo salió mal.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-num">→</div>
+        <div class="rule-text"><strong>No desaparezcas.</strong> Si pasaron más de 4-5 horas y el CD no sabe en qué estás, algo se rompió — no en el video, en la comunicación.</div>
+      </div>
+    </section>
+
+    <!-- QUÉ ESPERAMOS -->
+    <section class="ck-section" id="expectativas">
+      <div class="ck-section-num">06</div>
+      <div class="ck-section-sub">Sección 06</div>
+      <h2 class="ck-section-title">Qué esperamos de vos</h2>
+      <p style="font-size:13px;color:#888;line-height:1.7;margin-bottom:1.5rem;">Tres cosas concretas.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-title">Arrancá con lo que tenés</div>
+            <div class="step-desc">Si el brief te da todo lo que necesitás, vas directo. Si falta algo, lo preguntás por Slack y mientras tanto arrancás con lo que sí tenés. No hace falta tener todo cerrado antes de tocar la timeline.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-title">Comunicá antes de trabarte</div>
+            <div class="step-desc">Si tenés una duda, compartila. Si falta un asset, avisá. Si no tenés claro hacia dónde va el video, preguntá antes de meterle horas a una dirección que capaz no es la correcta. La regla: si pasaron más de 4-5 horas y el CD no sabe en qué estás, algo se rompió — no en el video, en la comunicación.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-content">
+            <div class="step-title">Respetá los deadlines</div>
+            <div class="step-desc">Nuestros clientes tienen fechas de lanzamiento de campaña, y una entrega tarde les puede costar una pauta entera. Si ves que no llegás, avisanos con anticipación — siempre hay forma de reorganizarnos si lo sabemos antes.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ASÍNCRONO -->
+    <section class="ck-section" id="asincrono">
+      <div class="ck-section-num">07</div>
+      <div class="ck-section-sub">Sección 07</div>
+      <h2 class="ck-section-title">Trabajo asíncrono</h2>
+      <div class="info-bar">Cada uno se maneja con su propio horario. Nadie controla si estás conectado — pero sí esperamos que todos los días mandes un avance o actualización de en qué estás.</div>
+      <div class="highlight">
+        <p><strong>Asíncrono ≠ silencio.</strong> Es comunicación diferida, pero constante. Un día entero sin que el equipo sepa en qué estás no es aceptable.</p>
+      </div>
+    </section>
+
+    <!-- ETA -->
+    <section class="ck-section" id="eta">
+      <div class="ck-section-num">08</div>
+      <div class="ck-section-sub">Sección 08</div>
+      <h2 class="ck-section-title">ETA table</h2>
+      <div class="info-bar">Acá encontrás todos los productos que produce Cerberus y sus tiempos estimados de producción. Conocerlos te ayuda a entender el alcance de cada proyecto que te llega. Hacé click en el recuadro de abajo para abrir el doc.</div>
+      <a href="https://docs.google.com/document/d/1sMJHUrxHWqleyRu8Iyd8elO2FWWWcxhZM8TIlhbLEaI/edit?tab=t.0#heading=h.6i1tz72g8alo" target="_blank" style="display:block;text-decoration:none;">
+        <div style="background:#141414;border:1px solid #E8000D33;border-radius:8px;padding:2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;" onmouseover="this.style.borderColor='#E8000D'" onmouseout="this.style.borderColor='#E8000D33'">
+          <div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;margin-bottom:0.5rem;">Google Doc</div>
+            <div style="font-family:'Anton',sans-serif;font-size:22px;letter-spacing:1px;text-transform:uppercase;color:#FFFFFF;margin-bottom:0.4rem;">Estimated Turnaround Time Table</div>
+            <div style="font-size:13px;color:#666;line-height:1.6;">Todos los productos, tiempos estimados y links a ejemplos de cada categoría.</div>
+          </div>
+          <div style="font-size:32px;color:#E8000D;opacity:0.5;flex-shrink:0;">→</div>
+        </div>
+      </a>
+    </section>
+
+    <!-- INSPO -->
+    <section class="ck-section" id="inspo">
+      <div class="ck-section-num">09</div>
+      <div class="ck-section-sub">Sección 09</div>
+      <h2 class="ck-section-title">Fuentes de inspo</h2>
+      <div class="info-bar" style="margin-bottom:1.5rem;"><strong>Una refe vale más que mil palabras.</strong> Antes de arrancar un proyecto, buscá algo que muestre hacia dónde va.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+        <a href="https://frameset.app" target="_blank" style="background:linear-gradient(135deg,#141414,#1A0A0A);border:1px solid #E8000D33;border-radius:8px;padding:1.25rem;text-decoration:none;display:block;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">⭐ Nuestra favorita</div>
+          <div style="font-size:15px;font-weight:600;color:#FFF;margin-bottom:0.4rem;">Frameset</div>
+          <div style="font-size:12px;color:#666;line-height:1.6;">Inspo cinematográfica. Los mejores shots están acá. Primera parada siempre.</div>
+        </a>
+        <a href="https://ar.pinterest.com" target="_blank" style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.25rem;text-decoration:none;display:block;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">La clásica</div>
+          <div style="font-size:15px;font-weight:600;color:#FFF;margin-bottom:0.4rem;">Pinterest</div>
+          <div style="font-size:12px;color:#666;line-height:1.6;">La vieja confiable. Rápida y amplia para referencias de cualquier estilo.</div>
+        </a>
+        <a href="https://www.cosmos.so" target="_blank" style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.25rem;text-decoration:none;display:block;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">Recurso extra</div>
+          <div style="font-size:15px;font-weight:600;color:#FFF;margin-bottom:0.4rem;">Cosmos</div>
+          <div style="font-size:12px;color:#666;line-height:1.6;">Más novedosa, ideal para cuando ya agotaste otras fuentes.</div>
+        </a>
+        <a href="https://eyecannndy.com" target="_blank" style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.25rem;text-decoration:none;display:block;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">Técnica visual</div>
+          <div style="font-size:15px;font-weight:600;color:#FFF;margin-bottom:0.4rem;">Eyecanddy</div>
+          <div style="font-size:12px;color:#666;line-height:1.6;">Librería de técnicas visuales. Para encontrar el tratamiento exacto de un shot o transición.</div>
+        </a>
+        <div style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.25rem;">
+          <div style="display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;border:1px solid #E8000D22;background:#E8000D11;padding:3px 8px;border-radius:4px;margin-bottom:0.75rem;">Interno</div>
+          <div style="font-size:15px;font-weight:600;color:#FFF;margin-bottom:0.4rem;">Nuestro portfolio</div>
+          <div style="font-size:12px;color:#666;line-height:1.6;">El estándar de calidad al que apuntamos. Antes de entregar algo, medilo contra esto. <a href="https://f.io/TvIM39JA" style="color:#E8000D;font-size:12px;" target="_blank">Ver cinematics →</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAYBOOKS -->
+    <section class="ck-section" id="playbooks">
+      <div class="ck-section-num">10</div>
+      <div class="ck-section-sub">Sección 10</div>
+      <h2 class="ck-section-title">Playbooks — la biblia</h2>
+      <p style="font-size:13px;color:#666;line-height:1.7;margin-bottom:1.5rem;">Estos son los recursos que definen cómo trabajamos en Cerberus. Leelos, míralos, volvé a ellos cuando lo necesites.</p>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <a href="https://app.notion.com/p/cerberusinc/For-Creatives-30488eb6622480d2a33eecd6ff5b8a55?source=copy_link" target="_blank" style="background:#141414;border:1px solid #1E1E1E;border-radius:8px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;text-decoration:none;transition:border-color 0.2s,background 0.2s;" onmouseover="this.style.borderColor='#E8000D44';this.style.background='#1A0A0A'" onmouseout="this.style.borderColor='#1E1E1E';this.style.background='#141414'">
+          <div style="font-size:20px;color:#E8000D;flex-shrink:0;width:24px;text-align:center;"><i class="ti ti-book"></i></div>
+          <div style="flex:1;">
+            <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E8000D;margin-bottom:0.2rem;">Notion · Hub de recursos</div>
+            <div style="font-size:14px;color:#FFF;font-weight:500;">For Creatives — Cerberus</div>
+            <div style="font-size:10px;color:#555;margin-top:0.2rem;letter-spacing:1px;text-transform:uppercase;">Notion</div>
+          </div>
+          <div style="font-size:16px;color:#333;"><i class="ti ti-arrow-right"></i></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="ck-footer">
+      <div class="ck-footer-msg">
+        <p>Somos un equipo exigente y buscamos la excelencia en todo lo que hacemos. Si estás leyendo esto es porque ya pasaste ese filtro — y eso no es poca cosa. Lo próximo que vas a recibir es el Loom con el brief de tu primer proyecto. Estamos muy contentos de tenerte en el equipo. <strong style="color:#E8000D;">Cualquier duda, nos escribís.</strong></p>
+        <p style="margin-top:1rem;font-size:13px;color:#E8000D;font-weight:600;">— El equipo Cerberus</p>
+      </div>
+      <div class="ck-footer-sig">Cerberus <span>Creative Company</span> · 2026</div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.ck-section');
+  const navLinks = document.querySelectorAll('.ck-nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        const id = entry.target.id;
+        navLinks.forEach(link => { link.classList.toggle('active', link.getAttribute('href') === '#' + id); });
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  sections.forEach(s => observer.observe(s));
+  document.querySelectorAll('.ck-nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
